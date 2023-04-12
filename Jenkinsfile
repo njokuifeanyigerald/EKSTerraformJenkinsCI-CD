@@ -15,6 +15,21 @@ pipeline{
                 }
             }
         }
+        stage("mvn testing"){
+            steps{
+                echo "====++++executing mvn testing++++===="
+                sh 'mvn test'
+            }
+            post{
+                success{
+                    echo "====++++mvn testing executed successfully++++===="
+                }
+                failure{
+                    echo "====++++mvn testing execution failed++++===="
+                }
+        
+            }
+        }
     }
     post{
         success{
@@ -24,4 +39,6 @@ pipeline{
             echo "========pipeline execution failed========"
         }
     }
+
+    
 }
