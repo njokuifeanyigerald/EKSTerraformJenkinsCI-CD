@@ -6,8 +6,9 @@ pipeline{
     }
 
     stages{
-        when{expression { param.action == 'create'} }
+        
         stage("Git checkout"){
+            when{expression { param.action == 'create'} }
             steps{
                 echo "========executing Git checkout========"
                 git 'https://github.com/njokuifeanyigerald/EKSTerraformJenkinsCI-CD.git'
@@ -21,8 +22,8 @@ pipeline{
                 }
             }
         }
-        when{expression { param.action == 'create'} }
         stage("mvn testing"){
+            when{expression { param.action == 'create'} }
             steps{
                 echo "====++++executing mvn testing++++===="
                 sh 'mvn test'
@@ -37,8 +38,8 @@ pipeline{
         
             }
         }
-        when{expression { param.action == 'create'} }
         stage("Integration testing"){
+            when{expression { param.action == 'create'} }
             steps{
                 echo "====++++executing Integration testing++++===="
                 sh 'mvn verify -DskipUnitTests'
@@ -53,8 +54,8 @@ pipeline{
         
             }
         }
-        when{expression { param.action == 'create'} }
         stage("Maven Build"){
+            when{expression { param.action == 'create'} }
             steps{
                 echo "====++++executing Maven Build++++===="
                 sh 'mvn clean install '
