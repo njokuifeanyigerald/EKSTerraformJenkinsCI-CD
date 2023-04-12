@@ -30,6 +30,36 @@ pipeline{
         
             }
         }
+        stage("Integration testing"){
+            steps{
+                echo "====++++executing Integration testing++++===="
+                sh 'mvn verify -DskipUnitTests'
+            }
+            post{
+                success{
+                    echo "====++++Integration testing executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Integration testing execution failed++++===="
+                }
+        
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                echo "====++++executing Maven Build++++===="
+                sh 'mvn clean install '
+            }
+            post{
+                success{
+                    echo "====++++Maven Build executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Maven Build execution failed++++===="
+                }
+        
+            }
+        }
     }
     post{
         success{
