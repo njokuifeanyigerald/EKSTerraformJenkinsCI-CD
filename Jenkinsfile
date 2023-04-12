@@ -1,11 +1,12 @@
 pipeline{
     agent any
     stages{
-        stage("A"){
+        stage("Git checkout"){
             steps{
-                echo "========executing A========"
+                echo "========executing Git checkout========"
+                git 'https://github.com/njokuifeanyigerald/EKSTerraformJenkinsCI-CD.git'
             }
-            post{9
+            post{
                 success{
                     echo "========A executed successfully========"
                 }
