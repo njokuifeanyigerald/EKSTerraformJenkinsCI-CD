@@ -9,8 +9,7 @@ Pre-requisites:
     
 Clone code from github:
 -------
-    git clone https://github.com/vikash-kumar01/spring-cloud-kubernetes.git
-    cd spring-cloud-kubernetes/kubernetes-configmap-reload
+    git clone https://github.com/njokuifeanyigerald/EKSTerraformJenkinsCI-CD.git
     
 Build Maven Artifact:
 -------
@@ -18,7 +17,7 @@ Build Maven Artifact:
  
 Build Docker image for Springboot Application
 --------------
-    docker build -t vikashashoke/kubernetes-configmap-reload .
+    docker build -t bopgeek/kubernetes-configmap-reload .
   
 Docker login
 -------------
@@ -26,7 +25,7 @@ Docker login
     
 Push docker image to dockerhub
 -----------
-    docker push vikashashoke/kubernetes-configmap-reload
+    docker push bopgeek/kubernetes-configmap-reload
     
 Deploy Spring Application:
 --------
@@ -50,4 +49,4 @@ Now we can cleanup by using below commands:
     kubectl delete deploy kubernetes-configmap-reload
     kubectl delete svc kubernetes-configmap-reload
 # springboot_k8s_application
-# mrdevops_java_app
+
