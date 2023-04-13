@@ -91,6 +91,24 @@ pipeline{
         
             }
         }
+        stage("Quality Gate"){
+            steps{
+                echo "====++++executing Quality Gate++++===="
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarQube'
+                }
+            }
+            post{
+                
+                success{
+                    echo "====++++Quality Gate executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Quality Gate execution failed++++===="
+                }
+        
+            }
+        }
     }
     post{
         success{
