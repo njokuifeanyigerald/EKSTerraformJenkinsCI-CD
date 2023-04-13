@@ -54,22 +54,7 @@ pipeline{
         
             }
         }
-        stage("Maven Build"){
-            when{expression { params.action == 'create'} }
-            steps{
-                echo "====++++executing Maven Build++++===="
-                sh 'mvn clean install '
-            }
-            post{
-                success{
-                    echo "====++++Maven Build executed successfully++++===="
-                }
-                failure{
-                    echo "====++++Maven Build execution failed++++===="
-                }
         
-            }
-        }
         stage("Static Code Analysis"){
             steps{
                 echo "====++++executing Static Code Analysis++++===="
@@ -105,6 +90,22 @@ pipeline{
                 }
                 failure{
                     echo "====++++Quality Gate execution failed++++===="
+                }
+        
+            }
+        }
+        stage("Maven Build"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "====++++executing Maven Build++++===="
+                sh 'mvn clean install '
+            }
+            post{
+                success{
+                    echo "====++++Maven Build executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Maven Build execution failed++++===="
                 }
         
             }
