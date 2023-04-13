@@ -70,6 +70,30 @@ pipeline{
         
             }
         }
+        stage("Static Code Analysis"){
+            steps{
+                echo "====++++executing Static Code Analysis++++===="
+                script{
+                    // withSonarQubeEnv(credentialsId: 'sonarQubeToken') {
+                    //     // some block
+                    //     sh 'mvn clean package sonar:sonar'
+                    // }
+                    withSonarQubeEnv(credentialsId: 'sonarQube') {
+                        // some block
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }  
+            }
+            post{
+                success{
+                    echo "====++++Static Code Analysis executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Static Code Analysis execution failed++++===="
+                }
+        
+            }
+        }
     }
     post{
         success{
