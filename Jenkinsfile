@@ -80,7 +80,11 @@ pipeline{
                     // }
                     withSonarQubeEnv(credentialsId: 'sonarQube') {
                         // some block
-                        sh 'mvn clean package sonar:sonar'
+                        // sh 'mvn clean package sonar:sonar'
+                        sh 'mvn sonar:sonar \
+                        -Dsonar.projectKey=com.minikube.sample:kubernetes-configmap-reload \
+                        -Dsonar.host.url=http://13.244.116.61:9000 \
+                        -Dsonar.login=jenkins'
                     }
                 }  
             }
