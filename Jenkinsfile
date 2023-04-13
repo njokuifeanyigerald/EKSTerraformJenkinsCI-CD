@@ -55,27 +55,27 @@ pipeline{
         //     }
         // }
         
-        // stage("Static Code Analysis"){
-        //     steps{
-        //         echo "====++++executing Static Code Analysis++++===="
-        //         script{
-        //             withSonarQubeEnv(credentialsId: 'sonarQube') {
-        //                 // some block
-        //                 sh 'mvn clean package sonar:sonar'
+        stage("Static Code Analysis"){
+            steps{
+                echo "====++++executing Static Code Analysis++++===="
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonarQube') {
+                        // some block
+                        sh 'mvn clean package sonar:sonar'
                        
-        //             }
-        //         }  
-        //     }
-        //     post{
-        //         success{
-        //             echo "====++++Static Code Analysis executed successfully++++===="
-        //         }
-        //         failure{
-        //             echo "====++++Static Code Analysis execution failed++++===="
-        //         }
+                    }
+                }  
+            }
+            post{
+                success{
+                    echo "====++++Static Code Analysis executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Static Code Analysis execution failed++++===="
+                }
         
-        //     }
-        // }
+            }
+        }
         stage("Quality Gate"){
             steps{
                 echo "====++++executing Quality Gate++++===="
