@@ -52,7 +52,7 @@ def ecrDockerScan(String aws_account_id, String region, String ecr_repoName){
 
 def ecrDockerPush(String aws_account_id, String region, String ecr_repoName){
     // aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com
-    sh "docker login -u AWS -p $(aws ecr get-login-password --region ${region}) ${aws_account_id}.dkr.ecr.${region}.amazonaws.com"
+    sh "docker login -u AWS -p \$(aws ecr get-login-password --region ${region}) ${aws_account_id}.dkr.ecr.${region}.amazonaws.com"
     sh "docker push ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${ecr_repoName}:latest"
 }
 
