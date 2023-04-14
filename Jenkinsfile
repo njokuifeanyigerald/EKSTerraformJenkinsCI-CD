@@ -1,12 +1,22 @@
+def gv
 pipeline{
     agent any
 
     parameters {
         choice(name: 'action', choices: 'create\ndelete', description: 'choose create or destroy')
+        string(name: 'ImageName', description: 'name of the docker build', defaultValue:"javaapp")
+        string(name: 'ImageTag', description: 'tag of the docker build', defaultValue: "v1")
+        string(name: "AppName", description: "name of the Application", defaultValue: "springboot")
     }
 
     stages{
-        
+        stage("init"){
+            steps{
+                script{
+                    gv  = load "script.groovy"
+                }   
+            }
+        }
         stage("Git checkout"){
             when{expression { params.action == 'create'} }
             steps{
@@ -55,45 +65,45 @@ pipeline{
         //     }
         // }
         
-        stage("Static Code Analysis"){
-            steps{
-                echo "====++++executing Static Code Analysis++++===="
-                script{
-                    withSonarQubeEnv(credentialsId: 'sonarQube') {
-                        // some block
-                        sh 'mvn clean package sonar:sonar'
+        // stage("Static Code Analysis"){
+        //     steps{
+        //         echo "====++++executing Static Code Analysis++++===="
+        //         script{
+        //             withSonarQubeEnv(credentialsId: 'sonarQube') {
+        //                 // some block
+        //                 sh 'mvn clean package sonar:sonar'
                        
-                    }
-                }  
-            }
-            post{
-                success{
-                    echo "====++++Static Code Analysis executed successfully++++===="
-                }
-                failure{
-                    echo "====++++Static Code Analysis execution failed++++===="
-                }
+        //             }
+        //         }  
+        //     }
+        //     post{
+        //         success{
+        //             echo "====++++Static Code Analysis executed successfully++++===="
+        //         }
+        //         failure{
+        //             echo "====++++Static Code Analysis execution failed++++===="
+        //         }
         
-            }
-        }
-        stage("Quality Gate"){
-            steps{
-                echo "====++++executing Quality Gate++++===="
-                script{
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarQube'
-                }
-            }
-            post{
+        //     }
+        // }
+        // stage("Quality Gate"){
+        //     steps{
+        //         echo "====++++executing Quality Gate++++===="
+        //         script{
+        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonarQube'
+        //         }
+        //     }
+        //     post{
                 
-                success{
-                    echo "====++++Quality Gate executed successfully++++===="
-                }
-                failure{
-                    echo "====++++Quality Gate execution failed++++===="
-                }
+        //         success{
+        //             echo "====++++Quality Gate executed successfully++++===="
+        //         }
+        //         failure{
+        //             echo "====++++Quality Gate execution failed++++===="
+        //         }
         
-            }
-        }
+        //     }
+        // }
         // stage("Maven Build"){
         //     when{expression { params.action == 'create'} }
         //     steps{
@@ -110,6 +120,23 @@ pipeline{
         
         //     }
         // }
+        stage("docker build"){
+            steps{
+                echo "====++++executing docker build++++===="
+                script{
+                    gv.dockerbuild("${params.ImageName}", "${params.ImageTag}", "${params.AppName}")
+                }
+
+            }
+            post{
+                success{
+                    echo "====++++docker build executed successfully++++===="
+                }
+                failure{
+                    echo "====++++docker build execution failed++++===="
+                }
+            }
+        }
     }
     post{
         success{
