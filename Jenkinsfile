@@ -140,7 +140,9 @@ pipeline{
         stage("docke image scan"){
             steps{
                 echo "====++++executing docke image scan++++===="
-                 gv.dockerScan("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                script{
+                    gv.dockerScan("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }
             }
             post{
                 success{
