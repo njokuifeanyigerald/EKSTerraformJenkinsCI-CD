@@ -136,6 +136,19 @@ pipeline{
                     echo "====++++docker build execution failed++++===="
                 }
             }
+        }stage("docke image scan"){
+            steps{
+                echo "====++++executing docke image scan++++===="
+                 gv.dockerScan("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+            }
+            post{
+                success{
+                    echo "====++++docke image scan executed successfully++++===="
+                }
+                failure{
+                    echo "====++++docke image scan execution failed++++===="
+                }
+            }
         }
     }
     post{
