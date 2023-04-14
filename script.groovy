@@ -13,4 +13,20 @@ def dockerScan(String project, String ImageTag, String hubUser){
        """
 }
 
+def dockerPush(String project, String ImageTag, String hubUser){
+    withCredentials([usernamePassword(
+        credentialsId: 'dockerhub_credentials', 
+        passwordVariable: 'password', usernameVariable: 'User')]) {
+        sh " docker login  -u '$User' -p '$password' "
+    }
+    sh """
+        docker image build -t ${hubUser}/${project} .
+        docker image push  ${hubUser}/${project}:${ImageTag}
+        docker image push ${hubUser}/${project}:latest
+       """
+
+    
+    
+}
+
 return this

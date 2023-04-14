@@ -153,6 +153,22 @@ pipeline{
                 }
             }
         }
+        stage("docke image push"){
+            steps{
+                echo "====++++executing docke image scan++++===="
+                script{
+                    gv.dockerPush("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }
+            }
+            post{
+                success{
+                    echo "====++++docke image push executed successfully++++===="
+                }
+                failure{
+                    echo "====++++docke image push execution failed++++===="
+                }
+            }
+        }
     }
     post{
         success{
