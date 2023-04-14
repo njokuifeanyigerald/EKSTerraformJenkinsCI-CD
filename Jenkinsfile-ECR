@@ -11,11 +11,11 @@ pipeline{
         string(name: 'ECR_REPO_NAME', description: "name of the ECR", defaultValue: 'gerald')
         string(name: 'cluster', description: "name of the EKS Cluster", defaultValue: 'demo-cluster1')
     }
-    // environment{
+    environment{
 
-    //     ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
-    //     SECRET_KEY = credentials('AWS_SECRET_KEY_ID')
-    // }
+        ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
+        SECRET_KEY = credentials('AWS_SECRET_KEY_ID')
+    }
 
     stages{
         stage("init"){
@@ -74,28 +74,28 @@ pipeline{
             }
         }
         
-        stage("Static Code Analysis"){
-            when{expression { params.action == 'create'} }
-            steps{
-                echo "====++++executing Static Code Analysis++++===="
-                script{
-                    withSonarQubeEnv(credentialsId: 'sonarQube') {
-                        // some block
-                        sh 'mvn clean package sonar:sonar'
+        // stage("Static Code Analysis"){
+        //     when{expression { params.action == 'create'} }
+        //     steps{
+        //         echo "====++++executing Static Code Analysis++++===="
+        //         script{
+        //             withSonarQubeEnv(credentialsId: 'sonarQube') {
+        //                 // some block
+        //                 sh 'mvn clean package sonar:sonar'
                        
-                    }
-                }  
-            }
-            post{
-                success{
-                    echo "====++++Static Code Analysis executed successfully++++===="
-                }
-                failure{
-                    echo "====++++Static Code Analysis execution failed++++===="
-                }
+        //             }
+        //         }  
+        //     }
+        //     post{
+        //         success{
+        //             echo "====++++Static Code Analysis executed successfully++++===="
+        //         }
+        //         failure{
+        //             echo "====++++Static Code Analysis execution failed++++===="
+        //         }
         
-            }
-        }
+        //     }
+        // }
         // stage("Quality Gate"){
         //     when{expression { params.action == 'create'} }
         //     steps{
