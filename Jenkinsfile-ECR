@@ -1,5 +1,4 @@
-@Library('my-shared-library') _
-
+def gv
 pipeline{
 
     agent any
