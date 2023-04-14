@@ -27,7 +27,7 @@ def dockerPush(String project, String ImageTag, String hubUser){
 }
 def dockerImageRemove(String project, String ImageTag, String hubUser){
     sh """
-        docker  rmi ${hubUser}/${project}:latest 
+        docker rmi ${hubUser}/${project}:latest 
         docker rmi ${hubUser}/${project}:${ImageTag}
        """
 }
@@ -49,5 +49,13 @@ def ecrDockerPush(String aws_account_id, String region, String ecr_repoName){
         docker push ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${ecr_repoName}:latest
        """
 }
+
+
+def ecrDockerPush(String aws_account_id, String region, String ecr_repoName){
+    sh """
+        docker rmi ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${ecr_repoName}:latest
+       """
+}
+
 
 return this

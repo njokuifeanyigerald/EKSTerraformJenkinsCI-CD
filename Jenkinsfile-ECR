@@ -148,6 +148,40 @@ pipeline{
                 }
             }
         }
+        stage("ECR docker push"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "====++++executing ECR docker build++++===="
+                script{
+                    gv.ecrDockerPush("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
+                }
+            }
+            post{
+                success{
+                    echo "====++++ECR docker build executed successfully++++===="
+                }
+                failure{
+                    echo "====++++ ECR docker build execution failed++++===="
+                }
+            }
+        }
+        stage("ECR docker push"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "====++++executing ECR docker build++++===="
+                script{
+                    gv.dockerImageRemove("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
+                }
+            }
+            post{
+                success{
+                    echo "====++++ECR docker build executed successfully++++===="
+                }
+                failure{
+                    echo "====++++ ECR docker build execution failed++++===="
+                }
+            }
+        }
     }
     post{
         success{
