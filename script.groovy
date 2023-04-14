@@ -43,6 +43,13 @@ def ecrDockerBuild(String aws_account_id, String region, String ecr_repoName){
        """
 }
 
+def ecrDockerScan(String aws_account_id, String region, String ecr_repoName){
+    sh """
+        trivy image ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${ecr_repoName}:latest > ECR.txt
+        cat ECR.txt
+       """
+}
+
 def ecrDockerPush(String aws_account_id, String region, String ecr_repoName){
     sh """
         aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com
