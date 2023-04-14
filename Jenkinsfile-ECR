@@ -165,7 +165,7 @@ pipeline{
                 }
             }
         }
-        stage("ECR docker push"){
+        stage("ECR docker remove image"){
             when{expression { params.action == 'create'} }
             steps{
                 echo "====++++executing ECR docker build++++===="
