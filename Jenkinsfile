@@ -141,7 +141,7 @@ pipeline{
                 }
             }
         }
-        stage("docke image scan"){
+        stage("docker image scan"){
             when{expression { params.action == 'create'} }
             steps{
                 echo "====++++executing docke image scan++++===="
@@ -158,7 +158,7 @@ pipeline{
                 }
             }
         }
-        stage("docke image push"){
+        stage("docker image push"){
             when{expression { params.action == 'create'} }
             steps{
                 echo "====++++executing docke image scan++++===="
@@ -176,7 +176,7 @@ pipeline{
                 }
             }
         }
-        stage("docke image removal"){
+        stage("docker image removal"){
             when{expression { params.action == 'create'} }
             steps{
                 echo "====++++executing docke image scan++++===="
