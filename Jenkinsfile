@@ -11,6 +11,7 @@ pipeline{
 
     stages{
         stage("init"){
+            when{expression { params.action == 'create'} }
             steps{
                 script{
                     gv  = load "script.groovy"
@@ -66,6 +67,7 @@ pipeline{
         // }
         
         // stage("Static Code Analysis"){
+        //     when{expression { params.action == 'create'} }
         //     steps{
         //         echo "====++++executing Static Code Analysis++++===="
         //         script{
@@ -87,6 +89,7 @@ pipeline{
         //     }
         // }
         // stage("Quality Gate"){
+        //     when{expression { params.action == 'create'} }
         //     steps{
         //         echo "====++++executing Quality Gate++++===="
         //         script{
@@ -121,6 +124,7 @@ pipeline{
         //     }
         // }
         stage("docker build"){
+            when{expression { params.action == 'create'} }
             steps{
                 echo "====++++executing docker build++++===="
                 script{
@@ -138,6 +142,7 @@ pipeline{
             }
         }
         stage("docke image scan"){
+            when{expression { params.action == 'create'} }
             steps{
                 echo "====++++executing docke image scan++++===="
                 script{
@@ -154,6 +159,7 @@ pipeline{
             }
         }
         stage("docke image push"){
+            when{expression { params.action == 'create'} }
             steps{
                 echo "====++++executing docke image scan++++===="
                 script{
