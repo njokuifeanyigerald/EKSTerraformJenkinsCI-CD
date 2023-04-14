@@ -6,7 +6,7 @@ pipeline{
         choice(name: 'action', choices: 'create\ndelete', description: 'choose create or destroy')
         string(name: 'ImageName', description: 'name of the docker build', defaultValue:"javaapp")
         string(name: 'ImageTag', description: 'tag of the docker build', defaultValue: "v1")
-        string(name: "AppName", description: "name of the Application", defaultValue: "bopgeek")
+        string(name: "DockerHubUser", description: "name of the Application", defaultValue: "bopgeek")
     }
 
     stages{
@@ -124,7 +124,7 @@ pipeline{
             steps{
                 echo "====++++executing docker build++++===="
                 script{
-                    gv.dockerbuild("${params.ImageName}", "${params.ImageTag}", "${params.AppName}")
+                    gv.dockerbuild("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
                 }
 
             }
