@@ -170,7 +170,7 @@ pipeline{
             steps{
                 echo "====++++executing ECR docker build++++===="
                 script{
-                    gv.dockerImageRemove("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
+                    gv.ecrDockerImageRemove("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
                 }
             }
             post{
