@@ -19,154 +19,126 @@ pipeline{
     }
 
     stages{
-         
-        stage('Git Checkout'){
-                    when { expression {  params.action == 'create' } }
-            steps{
-            gitCheckout(
-                branch: "main",
-                url: "https://github.com/vikash-kumar01/mrdevops_java_app.git"
-            )
-            }
-        }
-    //      stage('Unit Test maven'){
-         
-    //      when { expression {  params.action == 'create' } }
-
-    //         steps{
-    //            script{
-                   
-    //                mvnTest()
-    //            }
-    //         }
-    //     }
-    //      stage('Integration Test maven'){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                mvnIntegrationTest()
-    //            }
-    //         }
-    //     }
-    //     stage('Static code analysis: Sonarqube'){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                def SonarQubecredentialsId = 'sonarqube-api'
-    //                statiCodeAnalysis(SonarQubecredentialsId)
-    //            }
-    //         }
-    //     }
-    //     stage('Quality Gate Status Check : Sonarqube'){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                def SonarQubecredentialsId = 'sonarqube-api'
-    //                QualityGateStatus(SonarQubecredentialsId)
-    //            }
-    //         }
-    //     }
-    //     stage('Maven Build : maven'){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                mvnBuild()
-    //            }
-    //         }
-    //     }
-    //     stage('Docker Image Build : ECR'){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                dockerBuild("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-    //            }
-    //         }
-    //     }
-    // stage('Docker Image Scan: trivy '){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                dockerImageScan("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-    //            }
-    //         }
-    //     }
-    //     stage('Docker Image Push : ECR '){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                dockerImagePush("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-    //            }
-    //         }
-    //     }   
-    //     stage('Docker Image Cleanup : ECR '){
-    //      when { expression {  params.action == 'create' } }
-    //         steps{
-    //            script{
-                   
-    //                dockerImageCleanup("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-    //            }
-    //         }
-    //     } 
-        stage('Create EKS Cluster : Terraform'){
-            when { expression {  params.action == 'create' } }
+        stage("init"){
+            when{expression { params.action == 'create'} }
             steps{
                 script{
-
-                    dir('eks_module') {
-                      sh """
-                          
-                          terraform init 
-                          terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${params.Region}' --var-file=./config/terraform.tfvars
-                          terraform apply -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${params.Region}' --var-file=./config/terraform.tfvars --auto-approve
-                      """
-                  }
+                    gv  = load "script.groovy"
+                }   
+            }
+        }
+        stage("Git checkout"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "========executing Git checkout========"
+                git 'https://github.com/njokuifeanyigerald/EKSTerraformJenkinsCI-CD.git'
+            }
+            post{
+                success{
+                    echo "========A executed successfully========"
+                }
+                failure{
+                    echo "========A execution failed========"
                 }
             }
         }
-        stage('Connect to EKS '){
-            when { expression {  params.action == 'create' } }
-        steps{
-
-            script{
-
-                sh """
-                aws configure set aws_access_key_id "$ACCESS_KEY"
-                aws configure set aws_secret_access_key "$SECRET_KEY"
-                aws configure set region "${params.Region}"
-                aws eks --region ${params.Region} update-kubeconfig --name ${params.cluster}
-                """
+        stage("mvn testing"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "====++++executing mvn testing++++===="
+                sh 'mvn test'
+            }
+            post{
+                success{
+                    echo "====++++mvn testing executed successfully++++===="
+                }
+                failure{
+                    echo "====++++mvn testing execution failed++++===="
+                }
+        
             }
         }
-        } 
-        stage('Deployment on EKS Cluster'){
-            when { expression {  params.action == 'create' } }
+        stage("Integration testing"){
+            when{expression { params.action == 'create'} }
             steps{
-                script{
-                  
-                  def apply = false
-
-                  try{
-                    input message: 'please confirm to deploy on eks', ok: 'Ready to apply the config ?'
-                    apply = true
-                  }catch(err){
-                    apply= false
-                    currentBuild.result  = 'UNSTABLE'
-                  }
-                  if(apply){
-
-                    sh """
-                      kubectl apply -f .
-                    """
-                  }
-                }
+                echo "====++++executing Integration testing++++===="
+                sh 'mvn verify -DskipUnitTests'
             }
-        }    
+            post{
+                success{
+                    echo "====++++Integration testing executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Integration testing execution failed++++===="
+                }
+        
+            }
+        }
+        
+        stage("Static Code Analysis"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "====++++executing Static Code Analysis++++===="
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonarQube') {
+                        // some block
+                        sh 'mvn clean package sonar:sonar'
+                       
+                    }
+                }  
+            }
+            post{
+                success{
+                    echo "====++++Static Code Analysis executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Static Code Analysis execution failed++++===="
+                }
+        
+            }
+        }
+        // stage("Quality Gate"){
+        //     when{expression { params.action == 'create'} }
+        //     steps{
+        //         echo "====++++executing Quality Gate++++===="
+        //         script{
+        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonarQube'
+        //         }
+        //     }
+        //     post{
+                
+        //         success{
+        //             echo "====++++Quality Gate executed successfully++++===="
+        //         }
+        //         failure{
+        //             echo "====++++Quality Gate execution failed++++===="
+        //         }
+        
+        //     }
+        // }
+        stage("Maven Build"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "====++++executing Maven Build++++===="
+                sh 'mvn clean install '
+            }
+            post{
+                success{
+                    echo "====++++Maven Build executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Maven Build execution failed++++===="
+                }
+        
+            }
+        }
+    }
+    post{
+        success{
+            echo "========pipeline executed successfully ========"
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
     }
 }

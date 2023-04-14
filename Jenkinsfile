@@ -165,6 +165,25 @@ pipeline{
                 script{
                     gv.dockerPush("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
                 }
+                
+            }
+            post{
+                success{
+                    echo "====++++docke image push executed successfully++++===="
+                }
+                failure{
+                    echo "====++++docke image push execution failed++++===="
+                }
+            }
+        }
+        stage("docke image removal"){
+            when{expression { params.action == 'create'} }
+            steps{
+                echo "====++++executing docke image scan++++===="
+                script{
+                    gv.dockerImageRemove("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+                }
+                
             }
             post{
                 success{

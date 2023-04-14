@@ -23,10 +23,18 @@ def dockerPush(String project, String ImageTag, String hubUser){
         docker image build -t ${hubUser}/${project} .
         docker image push  ${hubUser}/${project}:${ImageTag}
         docker image push ${hubUser}/${project}:latest
-       """
-
-    
-    
+       """   
 }
+def dockerImageRemove(String project, String ImageTag, String hubUser){
+    sh """
+        docker  rmi ${hubUser}/${project}:latest 
+        docker rmi ${hubUser}/${project}:${ImageTag}
+       """
+}
+
+
+
+// FOR AWS ECR
+
 
 return this
