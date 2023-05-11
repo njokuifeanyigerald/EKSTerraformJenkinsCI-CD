@@ -50,3 +50,12 @@ Now we can cleanup by using below commands:
     kubectl delete svc kubernetes-configmap-reload
 # springboot_k8s_application
 
+
+
+## HOW TO CONNECT AWS TO JENKINS
+download aws cli v2+
+```
+sudo su
+su jenkins
+aws configure
+```
