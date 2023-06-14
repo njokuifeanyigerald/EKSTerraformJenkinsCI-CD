@@ -26,15 +26,15 @@ pipeline{
                 }   
             }
         }
-        steps{
-            echo "====++++executing cleaning the workspace++++===="
-            script{
-                cleanWs()
-            }
-        }
-        stage("Git checkout"){
+        stage("cleaning the workspace"){
             when{expression { params.action == 'create'} }
             steps{
+                echo "====++++executing cleaning the workspace++++===="
+                script{
+                    cleanWs()
+                }
+            }
+        }  steps{
                 echo "========executing Git checkout========"
                 git 'https://github.com/njokuifeanyigerald/EKSTerraformJenkinsCI-CD.git'
             }
