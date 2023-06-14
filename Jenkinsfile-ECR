@@ -233,6 +233,32 @@ pipeline{
             }
 
         }
+
+        stage("Connect to EKS"){
+            steps{
+                echo "====++++Connect to EKS++++====" 
+                script{
+                    dir('eks_module') {
+                        sh """
+                            aws configure set aws_access_key "$ACCESS_KEY"
+                            aws configure set aws_secret_access_key "$SECRET_KEY"
+                            aws configure set region "${params.Region}"
+                            aws eks --region $${params.Region} update-kubeconfig --name ${params.cluster}
+                        """
+                    }
+                    
+                }
+            }
+            post{
+                success{
+                    echo "====++++Connect to EKS  executed successfully++++===="
+                }
+                failure{
+                    echo "====++++ Connect to EKS execution failed++++===="
+                }
+            }
+
+        }
     }
     post{
         success{
