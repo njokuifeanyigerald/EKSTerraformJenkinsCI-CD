@@ -149,23 +149,23 @@ pipeline{
             }
         }
 
-        stage("ECR docker scan"){
-            when{expression { params.action == 'create'} }
-            steps{
-                echo "====++++executing ECR docker build++++===="
-                script{
-                    gv.ecrDockerScan("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
-                }
-            }
-            post{
-                success{
-                    echo "====++++ECR docker scanexecuted successfully++++===="
-                }
-                failure{
-                    echo "====++++ ECR docker scan execution failed++++===="
-                }
-            }
-        }
+        // stage("ECR docker scan"){
+        //     when{expression { params.action == 'create'} }
+        //     steps{
+        //         echo "====++++executing ECR docker build++++===="
+        //         script{
+        //             gv.ecrDockerScan("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
+        //         }
+        //     }
+        //     post{
+        //         success{
+        //             echo "====++++ECR docker scanexecuted successfully++++===="
+        //         }
+        //         failure{
+        //             echo "====++++ ECR docker scan execution failed++++===="
+        //         }
+        //     }
+        // }
         stage("ECR docker push"){
             when{expression { params.action == 'create'} }
             steps{

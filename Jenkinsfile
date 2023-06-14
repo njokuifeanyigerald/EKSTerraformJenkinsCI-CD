@@ -141,23 +141,23 @@ pipeline{
                 }
             }
         }
-        stage("docker image scan"){
-            when{expression { params.action == 'create'} }
-            steps{
-                echo "====++++executing docke image scan++++===="
-                script{
-                    gv.dockerScan("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
-                }
-            }
-            post{
-                success{
-                    echo "====++++docke image scan executed successfully++++===="
-                }
-                failure{
-                    echo "====++++docke image scan execution failed++++===="
-                }
-            }
-        }
+        // stage("docker image scan"){
+        //     when{expression { params.action == 'create'} }
+        //     steps{
+        //         echo "====++++executing docke image scan++++===="
+        //         script{
+        //             gv.dockerScan("${params.ImageName}", "${params.ImageTag}", "${params.DockerHubUser}")
+        //         }
+        //     }
+        //     post{
+        //         success{
+        //             echo "====++++docke image scan executed successfully++++===="
+        //         }
+        //         failure{
+        //             echo "====++++docke image scan execution failed++++===="
+        //         }
+        //     }
+        // }
         stage("docker image push"){
             when{expression { params.action == 'create'} }
             steps{
