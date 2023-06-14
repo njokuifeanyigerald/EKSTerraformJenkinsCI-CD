@@ -26,6 +26,12 @@ pipeline{
                 }   
             }
         }
+        steps{
+            echo "====++++executing cleaning the workspace++++===="
+            script{
+                cleanWs()
+            }
+        }
         stage("Git checkout"){
             when{expression { params.action == 'create'} }
             steps{
