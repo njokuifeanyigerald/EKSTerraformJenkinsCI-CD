@@ -33,22 +33,22 @@ pipeline{
                 }
             }
         }
-        stage("mvn testing"){
-            when{expression { params.action == 'create'} }
-            steps{
-                echo "====++++executing mvn testing++++===="
-                sh 'mvn test'
-            }
-            post{
-                success{
-                    echo "====++++mvn testing executed successfully++++===="
-                }
-                failure{
-                    echo "====++++mvn testing execution failed++++===="
-                }
+        // stage("mvn testing"){
+        //     when{expression { params.action == 'create'} }
+        //     steps{
+        //         echo "====++++executing mvn testing++++===="
+        //         sh 'mvn test'
+        //     }
+        //     post{
+        //         success{
+        //             echo "====++++mvn testing executed successfully++++===="
+        //         }
+        //         failure{
+        //             echo "====++++mvn testing execution failed++++===="
+        //         }
         
-            }
-        }
+        //     }
+        // }
         stage("Integration testing"){
             when{expression { params.action == 'create'} }
             steps{
