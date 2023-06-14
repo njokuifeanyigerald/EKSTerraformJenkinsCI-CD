@@ -201,7 +201,7 @@ pipeline{
             }
         }
         stage("Create EKS Cluster With Terraform"){
-            stage{
+            steps{
                 echo "====++++Create EKS Cluster With Terraform++++====" 
                 script{
                     dir('eks_module') {
