@@ -34,7 +34,10 @@ pipeline{
                     cleanWs()
                 }
             }
-        }  steps{
+        }
+        stage("Git checkout"){
+            when{expression { params.action == 'create'} }
+            steps{
                 echo "========executing Git checkout========"
                 git 'https://github.com/njokuifeanyigerald/EKSTerraformJenkinsCI-CD.git'
             }
